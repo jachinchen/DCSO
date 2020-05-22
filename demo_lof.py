@@ -63,8 +63,7 @@ if __name__ == '__main__':
         print('\nn_ite', t + 1, data)  # print status
 
         # split the data into training and testing
-        X_train, X_test, y_train, y_test = train_test_split(X_orig, y_orig,
-                                                            test_size=test_size)
+        X_train, X_test, y_train, y_test = train_test_split(X_orig, y_orig, test_size=test_size)
         # normalized the data
         X_train_norm, X_test_norm = standardizer(X_train, X_test)
 
@@ -104,15 +103,11 @@ if __name__ == '__main__':
         # weights are distance or pearson in different modes
         clf_weights_pear = np.zeros([n_clf, 1])
         for i in range(n_clf):
-            clf_weights_pear[i] = \
-                pearsonr(target_mean, train_scores_norm[:, i].reshape(-1, 1))[
-                    0][0]
+            clf_weights_pear[i] = pearsonr(target_mean, train_scores_norm[:, i].reshape(-1, 1))[0][0]
 
         # generate weighted mean
-        target_test_weighted_pear = np.sum(
-            test_scores_norm * clf_weights_pear.reshape(1,
-                                                        -1) / clf_weights_pear.sum(),
-            axis=1)
+        target_test_weighted_pear = np.sum(test_scores_norm * clf_weights_pear.reshape(1, -1) / clf_weights_pear.sum(),
+                                           axis=1)
 
         test_target_list.append(target_test_weighted_pear)
         method_list.append('sg_wa')
@@ -169,17 +164,17 @@ if __name__ == '__main__':
 
             for d in range(n_clf):
                 # flip distance so larger values imply larger correlation
-                corr_dist_d[d,] = euclidean(target_k, curr_train_k[:, d],
+                corr_dist_d[d, ] = euclidean(target_k, curr_train_k[:, d],
                                             w=weights_k_dist) * -1
-                corr_dist_r[d,] = euclidean(target_k, curr_train_k[:, d],
+                corr_dist_r[d, ] = euclidean(target_k, curr_train_k[:, d],
                                             w=weights_k_rank) * -1
-                corr_dist_n[d,] = euclidean(target_k,
+                corr_dist_n[d, ] = euclidean(target_k,
                                             curr_train_k[:, d]) * -1
-                corr_pear_d[d,] = wpearsonr(target_k, curr_train_k[:, d],
+                corr_pear_d[d, ] = wpearsonr(target_k, curr_train_k[:, d],
                                             w=weights_k_dist)
-                corr_pear_r[d,] = wpearsonr(target_k, curr_train_k[:, d],
+                corr_pear_r[d, ] = wpearsonr(target_k, curr_train_k[:, d],
                                             w=weights_k_rank)
-                corr_pear_n[d,] = wpearsonr(target_k, curr_train_k[:, d])[
+                corr_pear_n[d, ] = wpearsonr(target_k, curr_train_k[:, d])[
                     0]
 
             corr_list = [corr_dist_d, corr_dist_r, corr_dist_n,
@@ -238,18 +233,16 @@ if __name__ == '__main__':
             corr_pear_n = np.zeros([n_clf, ])
 
             for d in range(n_clf):
-                corr_dist_d[d,] = euclidean(target_k, curr_train_k[:, d],
+                corr_dist_d[d, ] = euclidean(target_k, curr_train_k[:, d],
                                             w=weights_k_dist) * -1
-                corr_dist_r[d,] = euclidean(target_k, curr_train_k[:, d],
+                corr_dist_r[d, ] = euclidean(target_k, curr_train_k[:, d],
                                             w=weights_k_rank) * -1
-                corr_dist_n[d,] = euclidean(target_k,
-                                            curr_train_k[:, d]) * -1
-                corr_pear_d[d,] = wpearsonr(target_k, curr_train_k[:, d],
+                corr_dist_n[d, ] = euclidean(target_k, curr_train_k[:, d]) * -1
+                corr_pear_d[d, ] = wpearsonr(target_k, curr_train_k[:, d],
                                             w=weights_k_dist)
-                corr_pear_r[d,] = wpearsonr(target_k, curr_train_k[:, d],
+                corr_pear_r[d, ] = wpearsonr(target_k, curr_train_k[:, d],
                                             w=weights_k_rank)
-                corr_pear_n[d,] = wpearsonr(target_k, curr_train_k[:, d])[
-                    0]
+                corr_pear_n[d, ] = wpearsonr(target_k, curr_train_k[:, d])[0]
 
             corr_list = [corr_dist_d, corr_dist_r, corr_dist_n,
                          corr_pear_d, corr_pear_r, corr_pear_n]

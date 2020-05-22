@@ -19,23 +19,23 @@ def get_label_n(y, y_pred):
 
 
 def standardizer(X_train, X_test):
-    '''
+    """
     normalization function wrapper
     :param X_train:
     :param X_test:
     :return: X_train and X_test after the Z-score normalization
-    '''
+    """
     scaler = StandardScaler().fit(X_train)
     return scaler.transform(X_train), scaler.transform(X_test)
 
 
 def precision_n_score(y, y_pred):
-    '''
+    """
     Utlity function to calculate precision@n
     :param y: ground truth
     :param y_pred: number of outliers
     :return: score
-    '''
+    """
     # calculate the percentage of outliers
     out_perc = np.count_nonzero(y) / len(y)
 
@@ -45,12 +45,12 @@ def precision_n_score(y, y_pred):
 
 
 def argmaxp(a, p):
-    '''
-    Utlity function to return the index of top p values in a
+    """
+    Utility function to return the index of top p values in a
     :param a: list variable
     :param p: number of elements to select
     :return: index of top p elements in a
-    '''
+    """
 
     a = np.asarray(a).ravel()
     length = a.shape[0]
@@ -59,11 +59,11 @@ def argmaxp(a, p):
 
 
 def loaddata(filename):
-    '''
+    """
     load data
     :param filename:
     :return:
-    '''
+    """
     mat = scio.loadmat(os.path.join('datasets', filename + '.mat'))
     X_orig = mat['X']
     y_orig = mat['y'].ravel()
@@ -72,8 +72,7 @@ def loaddata(filename):
     return X_orig, y_orig, outlier_perc
 
 
-def train_predict_lof(k_list, X_train_norm, X_test_norm, train_scores,
-                      test_scores):
+def train_predict_lof(k_list, X_train_norm, X_test_norm, train_scores, test_scores):
     # initialize base detectors
     clf_list = []
     for k in k_list:
@@ -114,7 +113,7 @@ def train_predict_knn(k_list, X_train_norm, X_test_norm, train_scores,
 
 def print_save_result(data, base_detector, n_baselines, n_clf, n_ite, roc_mat,
                       ap_mat, prc_mat, method_list, timestamp, verbose):
-    '''
+    """
     :param data:
     :param base_detector:
     :param n_baselines:
@@ -127,7 +126,7 @@ def print_save_result(data, base_detector, n_baselines, n_clf, n_ite, roc_mat,
     :param timestamp:
     :param verbose:
     :return: None
-    '''
+    """
 
     roc_scores = np.round(np.mean(roc_mat, axis=0), decimals=4)
     ap_scores = np.round(np.mean(ap_mat, axis=0), decimals=4)

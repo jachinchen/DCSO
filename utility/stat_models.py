@@ -1,9 +1,6 @@
 import numpy as np
 from scipy.special import betainc
 from scipy.stats import pearsonr
-from scipy.stats import scoreatpercentile
-from sklearn.metrics import precision_score
-from sklearn.preprocessing import StandardScaler
 
 
 def wpearsonr(x, y, w=None):
@@ -45,7 +42,7 @@ def wpearsonr(x, y, w=None):
 
 
 #####################################
-#      PROBABILITY CALCULATIONS     #
+#     PROBABILITY CALCULATIONS      #
 #####################################
 
 

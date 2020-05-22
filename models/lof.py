@@ -4,6 +4,7 @@ from sklearn.preprocessing import MinMaxScaler
 from scipy.stats import rankdata
 from scipy.special import erf
 
+
 class Lof(LocalOutlierFactor):
     def fit(self, X_train, y=None):
         self.X_train = X_train

@@ -1,7 +1,8 @@
 import numpy as np
 
-def aom(scores, n_buckets, n_estimators, standard=True):
-    '''
+
+def aom(scores, n_buckets, n_estimators):
+    """
     Average of Maximum - An ensemble method for outlier detection
 
     Aggarwal, C.C. and Sathe, S., 2015. Theoretical foundations and algorithms
@@ -10,12 +11,12 @@ def aom(scores, n_buckets, n_estimators, standard=True):
     :param scores:
     :param n_buckets:
     :param n_estimators:
-    :param standard:
     :return:
-    '''
+    """
+
     scores = np.asarray(scores)
     if scores.shape[1] != n_estimators:
-        raise ValueError('score matrix should be n_samples by n_estimaters')
+        raise ValueError('score matrix should be n_samples by n_estimators')
 
     scores_aom = np.zeros([scores.shape[0], n_buckets])
 
@@ -30,19 +31,17 @@ def aom(scores, n_buckets, n_estimators, standard=True):
     head = 0
     for i in range(0, n_estimators, n_estimators_per_bucket):
         tail = i + n_estimators_per_bucket
-        batch_ind = int(i / n_estimators_per_bucket)
 
-        scores_aom[:, batch_ind] = np.max(
-            scores[:, estimators_list[head:tail]], axis=1)
+        batch_ind = int(i / n_estimators_per_bucket)
+        scores_aom[:, batch_ind] = np.max(scores[:, estimators_list[head:tail]], axis=1)
 
         head = head + n_estimators_per_bucket
-        tail = tail + n_estimators_per_bucket
 
     return np.mean(scores_aom, axis=1)
 
 
 def moa(scores, n_buckets, n_estimators):
-    '''
+    """
     Maximum of Average - An ensemble method for outlier detection
 
     Aggarwal, C.C. and Sathe, S., 2015. Theoretical foundations and algorithms
@@ -51,9 +50,8 @@ def moa(scores, n_buckets, n_estimators):
     :param scores:
     :param n_buckets:
     :param n_estimators:
-    :param standard:
     :return:
-    '''
+    """
     scores = np.asarray(scores)
     if scores.shape[1] != n_estimators:
         raise ValueError('score matrix should be n_samples by n_estimaters')
@@ -71,12 +69,10 @@ def moa(scores, n_buckets, n_estimators):
     head = 0
     for i in range(0, n_estimators, n_estimators_per_bucket):
         tail = i + n_estimators_per_bucket
-        batch_ind = int(i / n_estimators_per_bucket)
 
-        scores_moa[:, batch_ind] = np.mean(
-            scores[:, estimators_list[head:tail]], axis=1)
+        batch_ind = int(i / n_estimators_per_bucket)
+        scores_moa[:, batch_ind] = np.mean(scores[:, estimators_list[head:tail]], axis=1)
 
         head = head + n_estimators_per_bucket
-        tail = tail + n_estimators_per_bucket
 
     return np.max(scores_moa, axis=1)

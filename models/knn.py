@@ -9,10 +9,10 @@ from scipy.special import erf
 
 
 class Knn(object):
-    '''
+    """
     Knn class for outlier detection
     support original knn, average knn, and median knn
-    '''
+    """
 
     def __init__(self, n_neighbors=1, contamination=0.05, method='largest'):
         self.n_neighbors = n_neighbors
@@ -38,8 +38,7 @@ class Knn(object):
         elif self.method == 'median':
             dist = np.median(dist_arr, axis=1)
 
-        self.threshold = scoreatpercentile(dist,
-                                           100 * (1 - self.contamination))
+        self.threshold = scoreatpercentile(dist, 100 * (1 - self.contamination))
         self.decision_scores = dist.ravel()
         self.y_pred = (self.decision_scores > self.threshold).astype('int')
 
@@ -115,15 +114,15 @@ class Knn(object):
         return ranks_norm
 
 ##############################################################################
-# samples = [[-1, 0], [0., 0.], [1., 1], [2., 5.], [3, 1]]
+samples = [[-1, 0], [0., 0.], [1., 1], [2., 5.], [3, 1]]
+
+clf = Knn()
+clf.fit(samples)
+
+scores = clf.decision_function(np.asarray([[2, 3], [6, 8]])).ravel()
+assert (scores[0] == [2])
+assert (scores[1] == [5])
 #
-# clf = Knn()
-# clf.fit(samples)
-#
-# scores = clf.decision_function(np.asarray([[2, 3], [6, 8]])).ravel()
-# assert (scores[0] == [2])
-# assert (scores[1] == [5])
-# #
-# labels = clf.predict(np.asarray([[2, 3], [6, 8]])).ravel()
-# assert (labels[0] == [0])
-# assert (labels[1] == [1])
+labels = clf.predict(np.asarray([[2, 3], [6, 8]])).ravel()
+assert (labels[0] == [0])
+assert (labels[1] == [1])

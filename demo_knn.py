@@ -33,8 +33,7 @@ n_baselines = 30  # the number of baseline algorithms, DO NOT CHANGE
 loc_region_size = 100  # for consistency fixed to 100
 
 # k list for LOF algorithms, for constructing a pool of base detectors
-k_list = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-          110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
+k_list = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
 
 n_clf = len(k_list)  # 20 base detectors
 
@@ -65,13 +64,13 @@ if __name__ == '__main__':
         # split the data into training and testing
         X_train, X_test, y_train, y_test = train_test_split(X_orig, y_orig,
                                                             test_size=test_size)
-        # normalized the data
+        # normalise the data
         X_train_norm, X_test_norm = standardizer(X_train, X_test)
 
         train_scores = np.zeros([X_train.shape[0], n_clf])
         test_scores = np.zeros([X_test.shape[0], n_clf])
 
-        # initialized the list to store the results
+        # initialise the list to store the results
         test_target_list = []
         method_list = []
 
@@ -104,15 +103,11 @@ if __name__ == '__main__':
         # weights are distance or pearson in different modes
         clf_weights_pear = np.zeros([n_clf, 1])
         for i in range(n_clf):
-            clf_weights_pear[i] = \
-                pearsonr(target_mean, train_scores_norm[:, i].reshape(-1, 1))[
-                    0][0]
+            clf_weights_pear[i] = pearsonr(target_mean, train_scores_norm[:, i].reshape(-1, 1))[0][0]
 
         # generate weighted mean
         target_test_weighted_pear = np.sum(
-            test_scores_norm * clf_weights_pear.reshape(1,
-                                                        -1) / clf_weights_pear.sum(),
-            axis=1)
+            test_scores_norm * clf_weights_pear.reshape(1, -1) / clf_weights_pear.sum(), axis=1)
 
         test_target_list.append(target_test_weighted_pear)
         method_list.append('sg_wa')
@@ -169,17 +164,17 @@ if __name__ == '__main__':
 
             for d in range(n_clf):
                 # flip distance so larger values imply larger correlation
-                corr_dist_d[d,] = euclidean(target_k, curr_train_k[:, d],
+                corr_dist_d[d, ] = euclidean(target_k, curr_train_k[:, d],
                                             w=weights_k_dist) * -1
-                corr_dist_r[d,] = euclidean(target_k, curr_train_k[:, d],
+                corr_dist_r[d, ] = euclidean(target_k, curr_train_k[:, d],
                                             w=weights_k_rank) * -1
-                corr_dist_n[d,] = euclidean(target_k,
+                corr_dist_n[d, ] = euclidean(target_k,
                                             curr_train_k[:, d]) * -1
-                corr_pear_d[d,] = wpearsonr(target_k, curr_train_k[:, d],
+                corr_pear_d[d, ] = wpearsonr(target_k, curr_train_k[:, d],
                                             w=weights_k_dist)
-                corr_pear_r[d,] = wpearsonr(target_k, curr_train_k[:, d],
+                corr_pear_r[d, ] = wpearsonr(target_k, curr_train_k[:, d],
                                             w=weights_k_rank)
-                corr_pear_n[d,] = wpearsonr(target_k, curr_train_k[:, d])[
+                corr_pear_n[d, ] = wpearsonr(target_k, curr_train_k[:, d])[
                     0]
 
             corr_list = [corr_dist_d, corr_dist_r, corr_dist_n,
@@ -238,18 +233,17 @@ if __name__ == '__main__':
             corr_pear_n = np.zeros([n_clf, ])
 
             for d in range(n_clf):
-                corr_dist_d[d,] = euclidean(target_k, curr_train_k[:, d],
+                corr_dist_d[d, ] = euclidean(target_k, curr_train_k[:, d],
                                             w=weights_k_dist) * -1
-                corr_dist_r[d,] = euclidean(target_k, curr_train_k[:, d],
+                corr_dist_r[d, ] = euclidean(target_k, curr_train_k[:, d],
                                             w=weights_k_rank) * -1
-                corr_dist_n[d,] = euclidean(target_k,
+                corr_dist_n[d, ] = euclidean(target_k,
                                             curr_train_k[:, d]) * -1
-                corr_pear_d[d,] = wpearsonr(target_k, curr_train_k[:, d],
+                corr_pear_d[d, ] = wpearsonr(target_k, curr_train_k[:, d],
                                             w=weights_k_dist)
-                corr_pear_r[d,] = wpearsonr(target_k, curr_train_k[:, d],
+                corr_pear_r[d, ] = wpearsonr(target_k, curr_train_k[:, d],
                                             w=weights_k_rank)
-                corr_pear_n[d,] = wpearsonr(target_k, curr_train_k[:, d])[
-                    0]
+                corr_pear_n[d, ] = wpearsonr(target_k, curr_train_k[:, d])[0]
 
             corr_list = [corr_dist_d, corr_dist_r, corr_dist_n,
                          corr_pear_d, corr_pear_r, corr_pear_n]
@@ -278,8 +272,7 @@ if __name__ == '__main__':
         # store performance information and print result
         for i in range(n_baselines):
             roc_mat[t, i] = roc_auc_score(y_test, test_target_list[i])
-            ap_mat[t, i] = average_precision_score(y_test,
-                                                   test_target_list[i])
+            ap_mat[t, i] = average_precision_score(y_test, test_target_list[i])
             prc_mat[t, i] = precision_n_score(y_test, test_target_list[i])
             print(method_list[i], roc_mat[t, i])
 
